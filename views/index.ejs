@@ -1,0 +1,159 @@
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+    <title>Sign In | Twitter Post</title>
+    <!-- Favicon-->
+    <link rel="icon" href="static/favicon.ico" type="image/x-icon">
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css?family=Roboto:400,700&subset=latin,cyrillic-ext" rel="stylesheet"
+        type="text/css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" type="text/css">
+
+    <!-- Bootstrap Core Css -->
+    <link href="static/plugins/bootstrap/css/bootstrap.css" rel="stylesheet">
+
+    <!-- Waves Effect Css -->
+    <link href="static/plugins/node-waves/waves.css" rel="stylesheet" />
+
+    <!-- Animation Css -->
+    <link href="static/plugins/animate-css/animate.css" rel="stylesheet" />
+
+    <!-- Custom Css -->
+    <link href="static/css/style.css" rel="stylesheet">
+    <link rel="stylesheet" href="static/toastify.min.css">
+</head>
+
+<body class="login-page">
+    <div class="login-box">
+        <div class="logo">
+            <a href="javascript:void(0);">Twitter<b>Posts</b></a>
+            <small></small>
+        </div>
+        <div class="card">
+            <div class="body">
+                <form id="sign_in" action="/signin" method="POST" enctype="application/x-www-form-urlencoded">
+                    <div class="msg">Sign in</div>
+                    <div class="input-group">
+                        <span class="input-group-addon">
+                            <i class="material-icons">person</i>
+                        </span>
+                        <div class="form-line">
+                            <input type="text" class="form-control" name="email" placeholder="Email" required autofocus>
+                        </div>
+                    </div>
+                    <div class="input-group">
+                        <span class="input-group-addon">
+                            <i class="material-icons">lock</i>
+                        </span>
+                        <div class="form-line">
+                            <input type="password" class="form-control" name="password" placeholder="Password" required>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-12">
+                            <button class="btn btn-block bg-pink waves-effect" name="submit" type="submit">SIGN IN</button>
+                        </div>
+                    </div>
+                    <div class="row m-t-15 m-b--20">
+                        <div class="col-xs-6">
+                            <a href="/signup">Register Now!</a>
+                        </div>
+                        
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Jquery Core Js -->
+    <script src="static/plugins/jquery/jquery.min.js"></script>
+
+    <!-- Bootstrap Core Js -->
+    <script src="static/plugins/bootstrap/js/bootstrap.js"></script>
+
+    <!-- Waves Effect Plugin Js -->
+    <script src="static/plugins/node-waves/waves.js"></script>
+
+    <!-- Validation Plugin Js -->
+    <script src="static/plugins/jquery-validation/jquery.validate.js"></script>
+
+    <!-- Custom Js -->
+    <script src="static/js/admin.js"></script>
+    <script src="static/toastify.js"></script>
+    <script>
+
+        $(function () {
+            $('#sign_in').validate({
+                rules:{
+                    email:{
+                        required:true,
+                        email:true
+                    },
+                    password:{
+                        required:true,
+                        minlength:8,
+                    }
+                },
+                highlight: function (input) {
+                    $(input).parents('.form-line').addClass('error');
+                },
+                unhighlight: function (input) {
+                    $(input).parents('.form-line').removeClass('error');
+                },
+                errorPlacement: function (error, element) {
+                    $(element).parents('.input-group').append(error);
+                },                
+                messages:{
+                    email:{
+                        required:"Please enter email",
+                        email:"Please enter a valid email"
+                    },
+                    password:{
+                        required:"Please enter password",
+                        minlength:jQuery.validator.format("At least {0} characters required!")
+                    }
+                },
+                submitHandler: function(form) {
+                    form.submit();
+                }
+            });
+        });
+
+        
+        
+    </script>
+    <% if (error!='') { %>
+        
+        <script>
+            var err_msg= `<%= error %>` 
+            Toastify({
+                text: err_msg,
+                duration: 10000,
+                gravity: "top", 
+                position: "left",
+                className: "error",
+                style: {
+                  background: "red",
+                }
+            }).showToast();        
+        </script>
+   <% } %>
+   <% if (success!='') { %>
+        
+        <script>
+            var success_msg= `<%= success %>` 
+            Toastify({
+                text: success_msg,
+                className: "success",
+                style: {
+                background: "linear-gradient(to right, #00b09b, #96c93d)",
+                }
+            }).showToast();        
+        </script>
+    <% } %>
+</body>
+
+</html>

@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+    <title>Dashboard | Twitter Posts</title>
+    <!-- Favicon-->
+    <%- include('layout/header.ejs') %>
+</head>
+
+<body class="theme-red">
+
+    <%- include('layout/header_content.ejs') %>
+        <!-- #Top Bar -->
+        <%- include('layout/sidebar.ejs') %>
+            <input type="hidden" id="user_id" value="<%= user._id %>">
+            <input type="hidden" id="base_url" value="<%= base_url %>">
+            <section class="content">
+                <div class="container-fluid">
+                    <div class="row clearfix">
+                        <div class="col-xs-12 col-sm-3">
+                            <div class="card profile-card">
+                                <div class="profile-header">&nbsp;</div>
+                                <div class="profile-body">
+                                    <div class="image-area">
+                                        <img src="static/images/user-lg.jpg" alt="AdminBSB - Profile Image" />
+                                    </div>
+                                    <div class="content-area">
+                                        <h3><%= user.fullname %></h3>
+                                        <p>User</p>
+                                        <p>TwitterPosts</p>
+                                    </div>
+                                </div>
+                                <div class="profile-footer">
+                                    <ul>
+                                        <li>
+                                            <span>Followers</span>
+                                            <span><%= followers %></span>
+                                        </li>
+                                        <li>
+                                            <span>Following</span>
+                                            <span><%= followings %></span>
+                                        </li>
+                                    </ul>
+
+                                </div>
+                            </div>
+
+                            <div class="card card-about-me">
+                                <div class="header">
+                                    <h2>ABOUT ME</h2>
+                                </div>
+                                <div class="body">
+                                    <ul>
+                                        <li>
+                                            <div class="title">
+                                                <i class="material-icons">location_on</i>
+                                                Location
+                                            </div>
+                                            <div class="content">
+                                                <%= user.location %>
+                                            </div>
+                                        </li>
+
+                                        <li>
+                                            <div class="title">
+                                                <i class="material-icons">notes</i>
+                                                Description
+                                            </div>
+                                            <div class="content">
+                                                <%= user.about %>
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xs-12 col-sm-9">
+                            <div class="card">
+                                <div class="body">
+                                    <div>
+                                        <ul class="nav nav-tabs" role="tablist">
+                                            <li role="presentation" class="active"><a href="#home" aria-controls="home"
+                                                    role="tab" data-toggle="tab">My Posts</a></li>
+                                            <li role="presentation"><a href="#add_post" aria-controls="home" role="tab"
+                                                    data-toggle="tab">Add Post</a></li>
+                                            <li role="presentation"><a href="#timeline" aria-controls="settings"
+                                                    role="tab" data-toggle="tab">Timeline</a></li>
+                                            <li role="presentation"><a href="#addnew" aria-controls="settings"
+                                                    role="tab" data-toggle="tab">Follow New User</a></li>
+                                        </ul>
+
+                                        <div class="tab-content">
+
+                                            <!-- Add new post -->
+                                            <div role="tabpanel" class="tab-pane fade in" id="add_post">
+                                                <form class="form-horizontal" method="post" action="/addPost" id="upload_post" enctype="multipart/form-data">
+                                                    <input type="hidden" name="post_owner_id" value="<%= user._id %>">
+                                                    <div class="form-group">
+                                                        <label for="InputExperience"
+                                                            class="col-sm-2 control-label">Content</label>
+
+                                                        <div class="col-sm-10">
+                                                            <div class="form-line">
+                                                                <textarea class="form-control" id="content"
+                                                                    name="content" rows="3"
+                                                                    placeholder="Post Content" required></textarea>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label for="InputSkills"
+                                                            class="col-sm-2 control-label">Image/Video</label>
+
+                                                        <div class="col-sm-10">
+                                                            <div class="form-line">
+                                                                <input type="file" class="form-control" id="post_file"
+                                                                    name="post_file" required>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+
+
+
+                                                    <div class="form-group">
+                                                        <div class="col-sm-offset-2 col-sm-10">
+                                                            <button type="submit" class="btn btn-danger">Upload</button>
+                                                        </div>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                            <!-- Add new people -->
+                                            <div role="tabpanel" class="tab-pane fade in" id="addnew">
+                                                <div class="body table-responsive">
+                                                       
+                                                    <table class="table">
+
+                                                        <tbody>
+                                                            <% if(new_users.length!=0){
+                                                                for(let j=0; j<new_users.length;j++){    
+                                                            %>
+                                                            <tr>
+                                                                <td><img src="static/images/user-lg.jpg" width="99"
+                                                                        height="99" /></td>
+                                                                <td><%= new_users[j].fullname %></td>
+                                                                <td><button type="button" id="follow_user_btn"
+                                                                        class="btn bg-light-green waves-effect "
+                                                                         data-fid="<%= new_users[j]._id %>">Follow</button>
+                                                                    <button type="button" id="unfollow_user_btn"
+                                                                        class="btn bg-red waves-effect"
+                                                                         data-uid="<%= new_users[j]._id %>">UnFollow</button>
+                                                                </td>
+                                                            </tr>
+                                                            <%       }
+                                                                }else{        
+                                                            %> 
+                                                            <p>No user Found</p>
+                                                            <% } %>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+
+                                            <!-- tinmeline -->
+                                            <div role="tabpanel" class="tab-pane fade in scroll" id="timeline">
+                                                
+                                                <% if(timeline.length!=0){
+                                                    for(let k=0;k<timeline.length;k++){
+                                                %>
+                                                <div class="panel panel-default panel-post" id="timeline_post_<%= timeline[k]._id %>">
+                                                    <div class="panel-heading">
+                                                        <div class="media">
+                                                            <div class="media-left">
+                                                                <a href="#">
+                                                                    <img src="static/images/user-lg.jpg" />
+                                                                </a>
+                                                            </div>
+                                                            <div class="media-body">
+                                                                <h4 class="media-heading">
+                                                                    <a href="#"><%= timeline[k].user[0].fullname %></a>
+                                                                </h4>
+                                                                
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="panel-body">
+                                                        <div class="post">
+                                                            <div class="post-heading">
+                                                                <p><%= timeline[k].content %> </p>
+                                                            </div>
+                                                            <div class="post-content">
+                                                                <% if(timeline[k].content_file_type == 'image'){ %>
+                                                                    <img src="<%= timeline[k].content_file %>"
+                                                                        class="img-responsive" />
+                                                                <% }else{ %>
+                                                                        <iframe width="100%" height="220"
+                                                                        src="<%= timeline[k].content_file %>"
+                                                                        frameborder="0" allowfullscreen=""></iframe>
+                                                                <% } %> 
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="panel-footer">
+                                                        
+                                                    </div>
+                                                </div>
+                                                <% }
+                                                     }else{ 
+                                                %>
+                                                        <p>No status found</p>
+                                                <% } %>
+                                                
+                                                
+                                            </div>
+
+
+
+
+                                            <div role="tabpanel" class="tab-pane fade in active scroll" id="home">
+
+                                                <% if(posts.length!=0){
+                                                    
+                                                    for(let i=0; i<posts.length; i++){
+                                                %>
+                                                <div class="panel panel-default panel-post">
+                                                    <div class="panel-heading">
+                                                        <div class="media">
+                                                            <div class="media-left">
+                                                                <a href="#">
+                                                                    <img src="static/images/user-lg.jpg" />
+                                                                </a>
+                                                            </div>
+                                                            <div class="media-body">
+                                                                <h4 class="media-heading">
+                                                                    <a href="javascript:void(0)"><%= user.fullname %></a>
+                                                                </h4>
+                                                                
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="panel-body">
+                                                        <div class="post">
+                                                            <div class="post-heading">
+                                                                <p>
+                                                                    <%= posts[i].content %>
+                                                                </p>
+                                                            </div>
+
+                                                            <div class="post-content">
+                                                                <% if(posts[i].content_file_type == 'image'){ %>
+                                                                <img src="<%= posts[i].content_file %>"
+                                                                    class="img-responsive" />
+                                                                <% }else{ %>
+                                                                    <iframe width="100%" height="220"
+                                                                    src="<%= posts[i].content_file %>"
+                                                                    frameborder="0" allowfullscreen=""></iframe>
+                                                                <% } %>    
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="panel-footer">
+                                                        
+
+                                                        
+                                                    </div>
+                                                </div>
+
+                                                <% }
+                                                    }else{ 
+                                                %>
+                                                      <p>No post found</p>  
+                                                <% } %>
+                                                
+                                            </div>
+                                            
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <%- include('layout/footer.ejs') %>
+            <%- include('layout/toaster_msg.ejs') %>
+</body>
+
+</html>
